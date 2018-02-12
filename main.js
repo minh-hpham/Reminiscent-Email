@@ -4,13 +4,16 @@ const app = electron.app
 
 const BrowserWindow = electron.BrowserWindow
 
+var path = require('path')
 
 let mainWindow
 
 function createWindow () {
     mainWindow = new BrowserWindow( {
-        width : 800,
-        height : 600
+        width : 450,
+        height : 600,
+        backgroundColor : '#312450',
+        icon: path.join(__dirname, 'assets/icons/png/64x64.png')
     })
 
     mainWindow.loadURL('index.html')
