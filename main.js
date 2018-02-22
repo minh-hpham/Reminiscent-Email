@@ -10,13 +10,13 @@ let mainWindow
 
 function createWindow () {
     mainWindow = new BrowserWindow( {
-        width : 450,
-        height : 600,
-        backgroundColor : '#312450',
+        width : 600,
+        height : 800,
+//        backgroundColor : '#312450',
         icon: path.join(__dirname, 'assets/icons/png/64x64.png')
     })
-
-    mainWindow.loadURL('index.html')
+    mainWindow.loadURL(path.join(__dirname, 'index.html'))
+//    mainWindow.loadURL('index.html')
 
     mainWindow.webContents.openDevTools()
 

@@ -94,7 +94,7 @@ app.once('ready', () => {
     titleBarStyle: 'hiddenInset',
     width: 200,
     height: 200,
-    backgroundColor: '#000'
+    backgroundColor: '#150'
   })
   window.loadURL('about:blank')
   window.setTouchBar(touchBar)
