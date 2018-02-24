@@ -13,9 +13,9 @@ function createWindow () {
         width : 600,
         height : 800,
 //        backgroundColor : '#312450',
-        icon: path.join(__dirname, 'assets/icons/png/64x64.png')
+        icon: path.join(__dirname, 'app/assets/icons/png/Capture.PNG_64x64.png')
     })
-    mainWindow.loadURL(path.join(__dirname, 'index.html'))
+    mainWindow.loadURL(path.join(__dirname, 'app/index.html'))
 //    mainWindow.loadURL('index.html')
 
     mainWindow.webContents.openDevTools()

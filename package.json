@@ -1,5 +1,10 @@
 {
-    "name" : "Reminiscent Email",
-    "version" : "0.1.0",
-    "main" : "main.js"
+  "name": "",
+  "description": "* This repos is for Reminiscent-Email project  - a cross platform desktop application using Electron and Python (for Machine Learning components).  ``` * Clone the repository ``` $ git clone https://github.com/minh-hpham/Reminiscent-Email.git ``` ``` * Install project requirements and dependencies ``` $ npm install -r requirements.txt",
+  "version": "",
+  "dependencies": {
+    "express": "^4.16.2",
+    "jQuery": "^1.7.4",
+    "jquery": "^3.3.1"
+  }
 }

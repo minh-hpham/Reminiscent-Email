@@ -1,1 +1,2 @@
 electron -g
+--save jQuery
