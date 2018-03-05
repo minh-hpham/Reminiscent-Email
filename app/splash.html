@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <p>version <span id="versionSpan"></span></p>
+</body>
+<script>
+    const { ipcRenderer } = require('electron')
+    ipcRenderer.on('set-version', (event, arg) => {
+        const versionSpan = document.getElementById('versionSpan')
+        versionSpan.innerHTML = arg
+    })
+    ipcRenderer.send('get-version')
+</script>
+</html>
