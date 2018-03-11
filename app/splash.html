@@ -8,11 +8,7 @@
     <p>version <span id="versionSpan"></span></p>
 </body>
 <script>
-    const { ipcRenderer } = require('electron')
-    ipcRenderer.on('set-version', (event, arg) => {
-        const versionSpan = document.getElementById('versionSpan')
-        versionSpan.innerHTML = arg
-    })
-    ipcRenderer.send('get-version')
+    require('../splash_renderer.js')
+
 </script>
 </html>

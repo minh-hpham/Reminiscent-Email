@@ -8,6 +8,8 @@ var path = require('path')
 var url = require('url')
 
 const ipcMain = electron.ipcMain
+
+
 const isOnline = require('is-online')
 let checkIsOnlineInterval
 let currentOnlineStatus
@@ -41,7 +43,6 @@ function createSplashWindow() {
     })
 }
 
-app.on('ready', createSplashWindow)
 
 function createWindow () {
     mainWindow = new BrowserWindow( {
@@ -49,8 +50,7 @@ function createWindow () {
         center : true,
         width : 600,
         height : 800,
-        icon: path.join(__dirname, 'app/assets/icons/png/Capture.PNG_64x64.png'),
-//        frame : false,
+        icon: path.join(__dirname, 'app/assets/icons/png/Capture.PNG_64x64.png')
     })
     mainWindow.loadURL(path.join(__dirname, 'app/index.html'))
 //    mainWindow.loadURL('index.html')
@@ -58,29 +58,34 @@ function createWindow () {
     // Open the DevTools.
     mainWindow.webContents.openDevTools()
 
-    mainWindow.once('ready-to-show', () => {
-        mainWindow.show()
-    })
+//    mainWindow.once('ready-to-show', () => {
+//        mainWindow.show()
+//    })
 
     mainWindow.on('closed', function () {
         mainWindow = null
     })
 
-    startCheckingOnlineStatus()
+//    startCheckingOnlineStatus()
 }
 
-
+app.on('ready', createSplashWindow)
 //app.on('ready', function() {
+//    createSplashWindow();
 //    createWindow()
 //})
 
 app.on('window-all-closed', function () {
+    // On OS X it is common for applications and their menu bar
+    // to stay active until the user quits explicitly with Cmd + Q
     if (process.platform !== 'darwin') {
         app.quit()
     }
 })
 
 app.on('activate', function () {
+    // On OS X it's common to re-create a window in the app when the
+    // dock icon is clicked and there are no other windows open.
     if (mainWindow === null) {
         createWindow()
     }
@@ -108,11 +113,15 @@ ipcMain.on('check-online-status', checkIsOnline )
 ipcMain.on('get-version', event => {
     console.log('app version: ', app.getVersion())
     event.sender.send('set-version', app.getVersion())
+//    mainWindow.webContents.send('set-version', app.getVersion());
 })
 
 ipcMain.on('app-init', event => {
+    console.log(splashWindow != null)
     if (splashWindow) {
-        setTimeout(() => {splashWindow.close()}, 2000)
+        setTimeout(() => {
+            splashWindow.close()
+            mainWindow.show()
+        }, 2000)
     }
-    mainWindow.show()
 })
