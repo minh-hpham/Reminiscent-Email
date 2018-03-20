@@ -20,7 +20,7 @@ const updateOnlineStatus = ( event, status ) => {
     this.onlineStatus = status.online
 }
 
-constcheckOnlineStatus = () => {
+const checkOnlineStatus = () => {
     ipcRenderer.send('check-online-status')
 }
 
