@@ -17,31 +17,31 @@ let currentOnlineStatus
 
 let mainWindow
 
-let splashWindow
-
-function createSplashWindow() {
-    splashWindow = new BrowserWindow({
-        width: 320,
-        height: 240,
-        frame: false,
-        resizable: false,
-        backgroundColor: '#FFF',
-        alwaysOnTop: true,
-        show: false
-    })
-    splashWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'app/splash.html'),
-        protocol: 'file',
-        slashes: true
-    }))
-    splashWindow.on('closed', () => {
-        splashWindow = null
-    })
-    splashWindow.once('ready-to-show', () => {
-        splashWindow.show()
-        createWindow()
-    })
-}
+//let splashWindow
+//
+//function createSplashWindow() {
+//    splashWindow = new BrowserWindow({
+//        width: 320,
+//        height: 240,
+//        frame: false,
+//        resizable: false,
+//        backgroundColor: '#FFF',
+//        alwaysOnTop: true,
+//        show: false
+//    })
+//    splashWindow.loadURL(url.format({
+//        pathname: path.join(__dirname, 'app/splash.html'),
+//        protocol: 'file',
+//        slashes: true
+//    }))
+//    splashWindow.on('closed', () => {
+//        splashWindow = null
+//    })
+//    splashWindow.once('ready-to-show', () => {
+//        splashWindow.show()
+//        createWindow()
+//    })
+//}
 
 
 function createWindow () {
@@ -58,9 +58,9 @@ function createWindow () {
     // Open the DevTools.
     mainWindow.webContents.openDevTools()
 
-//    mainWindow.once('ready-to-show', () => {
-//        mainWindow.show()
-//    })
+    mainWindow.once('ready-to-show', () => {
+        mainWindow.show()
+    })
 
     mainWindow.on('closed', function () {
         mainWindow = null
@@ -69,11 +69,11 @@ function createWindow () {
 //    startCheckingOnlineStatus()
 }
 
-app.on('ready', createSplashWindow)
-//app.on('ready', function() {
+//app.on('ready', createSplashWindow)
+app.on('ready', function() {
 //    createSplashWindow();
-//    createWindow()
-//})
+    createWindow();
+})
 
 app.on('window-all-closed', function () {
     // On OS X it is common for applications and their menu bar

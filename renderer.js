@@ -28,4 +28,4 @@ ipcRenderer.on('update-online-status', updateOnlineStatus )
 
 window.addEventListener( 'online', checkOnlineStatus )
 window.addEventListener( 'offline', checkOnlineStatus )
-checkOnlineStatus()
+//checkOnlineStatus()

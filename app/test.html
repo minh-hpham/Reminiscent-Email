@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="css/myapp.css">
+        <title>Reminiscent</title> 
+    </head>
+
+    <body>
+
+        <div class="body"></div>
+            <div class="grad"></div>
+            <div class="header">
+                <div>REMINISCENT</div>
+            </div>
+            <br>
+            <div class="login">
+<!--
+                <input type="text" placeholder="gmail" name="user"><br>
+                <input type="password" placeholder="gmail's password" name="password"><br>
+-->
+                <div id="user-enter-code" style="display:none;">
+                    <p>Authorize this app by visiting this url: <a id="authUrl" href="">this url</a></p>
+                    <label for="user-code">Enter your access code:</label>
+                    <br>
+                    <input id="user-code" type="text" name="user-code" >
+                    <br>
+                </div>
+               
+                <input id="signin-btn" type="button" value="Sign In with Google Account" onclick="signin()">
+                
+            </div>
+        <script>require('../renderer.js')</script>
+        <script src = "js/grant_access.js" ></script>
+        <script src="js/prefixfree.min.js"></script>
+
+    </body>
+
+</html>

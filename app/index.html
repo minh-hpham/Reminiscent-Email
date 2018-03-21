@@ -3,76 +3,57 @@
 
     <head>
         <meta charset="UTF-8">
-        <link rel="stylesheet" type="text/css" href="css/myapp.css">
-        <title>Reminiscent</title>
-        <!-- BEGIN Pre-requisites -->
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-        <script src="https://apis.google.com/js/client:platform.js?onload=start" async defer></script>
-        <!-- END Pre-requisites -->
-        <script>
-            function start() {
-              gapi.load('auth2', function() {
-                auth2 = gapi.auth2.init({
-                  client_id: '392332254331-kfcfjqt50t3q48hmistovdpr61q421k0.apps.googleusercontent.com.apps.googleusercontent.com',
-                  // Scopes to request in addition to 'profile' and 'email'
-                  scope: ['https://www.googleapis.com/auth/gmail.readonly']
-                });
-              });
-            }
-</script>     
+        <title>Reminiscent</title> 
+        <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900'>
+        <link rel="stylesheet" href="css/style.css">
     </head>
 
     <body>
+        <div class="body"></div>
+        <div class="container">
+            <div class="info">
+                <h1>Reminiscent Email</h1><span>Author @ <a href="https://github.com/minh-hpham/">Minh Pham</a></span>
+            </div>
+        </div>
+        <div class="form">
+            <div class="letter"><img src="images/letter.PNG"/></div>
+            <br>
+            <p class="message" style="display: none;">Please authorize the app with <a id="authUrl" href="#">this url</a></p>
+            <input style="display: none;" id="user-code" type="text" name="user-code" placeholder="Enter the access code">
+<!--
+            
+            <div id="user-enter-code" >
+                <p >Authorize this app by visiting <a id="authUrl" href="#">url</a></p>
+                <input id="user-code" type="text" name="user-code" placeholder="Enter the access code">
+                <br>
+            </div>
+-->
+            <br>
+            <form class="login-form">
+                <button class="loginBtn loginBtn--google" id="signin-btn" type="button" onclick="signin()">
+                    Sign in with Google Account
+                </button>
 
+            </form>
+        </div>
+<!--
         <div class="body"></div>
             <div class="grad"></div>
             <div class="header">
                 <div>REMINISCENT</div>
             </div>
             <br>
-            <button id="signinButton">Sign in with Google</button>
-            <script>
-                $('#signinButton').click(function() {
-                    // signInCallback defined in step 6.
-                    auth2.grantOfflineAccess().then(signInCallback);
-                });
-                function signInCallback(authResult) {
-                    if (authResult['code']) {
-
-                    // Hide the sign-in button now that the user is authorized, for example:
-                    $('#signinButton').attr('style', 'display: none');
-
-                        // Send the code to the server
-                        $.ajax({
-                          type: 'POST',
-                          url: 'http://example.com/storeauthcode',
-                          // Always include an `X-Requested-With` header in every AJAX request,
-                          // to protect against CSRF attacks.
-                          headers: {
-                            'X-Requested-With': 'XMLHttpRequest'
-                          },
-                          contentType: 'application/octet-stream; charset=utf-8',
-                          success: function(result) {
-                            // Handle or verify the server response.
-                          },
-                          processData: false,
-                          data: authResult['code']
-                        });
-                    } else {
-                    // There was an error.
-                    }
-                }
-            </script>
-<!--
             <div class="login">
                 <input type="text" placeholder="gmail" name="user"><br>
                 <input type="password" placeholder="gmail's password" name="password"><br>
-                <input id="activate-btn" type="button" value="Activate">
+                
+               
+                <input id="signin-btn" type="button" value="Sign In with Google Account" onclick="signin()">
+                
             </div>
 -->
-
         <script>require('../renderer.js')</script>
-        <script src = "js/view.js" ></script>
+        <script src = "js/grant_access.js" ></script>
         <script src="js/prefixfree.min.js"></script>
 
     </body>
