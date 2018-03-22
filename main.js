@@ -7,8 +7,12 @@ const BrowserWindow = electron.BrowserWindow
 var path = require('path')
 var url = require('url')
 
-const ipcMain = electron.ipcMain
+var fs = require('fs');
 
+const ipcMain = electron.ipcMain
+var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
+    process.env.USERPROFILE) + '/.credentials/';
+var TOKEN_PATH = TOKEN_DIR + 'gmail-nodejs-quickstart.json';
 
 const isOnline = require('is-online')
 let checkIsOnlineInterval
@@ -46,20 +50,31 @@ let mainWindow
 
 function createWindow () {
     mainWindow = new BrowserWindow( {
+//        backgroundColor: '#002b36',
         show : false,
         center : true,
-        width : 600,
-        height : 800,
-        icon: path.join(__dirname, 'app/assets/icons/png/Capture.PNG_64x64.png')
+        width : 1024,
+        height : 600,
+//        frame: false,
+        icon: path.join(__dirname,'app/images/letter.PNG_256x256.png')
     })
-    mainWindow.loadURL(path.join(__dirname, 'app/index.html'))
-//    mainWindow.loadURL('index.html')
+
+    fs.readFile(TOKEN_PATH, function(err, token) {
+        if (err) {
+            mainWindow.loadURL(path.join(__dirname, 'app/index.html'))
+        } else {
+            mainWindow.loadURL(path.join(__dirname, 'app/email.html'))
+        }
+    });
+
+//    mainWindow.loadURL(path.join(__dirname, 'app/index.html'))
 
     // Open the DevTools.
     mainWindow.webContents.openDevTools()
 
     mainWindow.once('ready-to-show', () => {
-        mainWindow.show()
+        mainWindow.show();
+        mainWindow.focus();
     })
 
     mainWindow.on('closed', function () {

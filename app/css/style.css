@@ -1,8 +1,17 @@
+::-webkit-scrollbar { display: none; }
 html, body {
     height: 100%;
     margin: 0;
     padding: 0;
 }
+
+/*
+body {
+    overflow-x: hidden;
+    -ms-overflow-style: scrollbar;
+    -webkit-app-region: drag;
+}
+*/
 .body{
 	position: absolute;
 	top: -20px;
@@ -12,7 +21,7 @@ html, body {
 	width: auto;
 	height: auto;
 /*    background-color: beige;*/
-	background-image: url("../images/plane.jpg");
+	background-image: url("../images/paperplane.png");
 /*    background-size:100% 100%;*/
 	background-size: cover;
 /*	-webkit-filter: blur(5px);*/
