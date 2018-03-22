@@ -1,24 +1,20 @@
 <!DOCTYPE html>
 <html>
-<title>Reminiscent Email</title>
+<title>W3.CSS Template</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link href='https://fonts.googleapis.com/css?family=RobotoDraft' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
 <style>
-    html,body,h1,h2,h3,h4,h5 {
-        font-family: "RobotoDraft", "Roboto", sans-serif
-    }
-    .w3-bar-block .w3-bar-item {
-        padding: 16px
-    }
+html,body,h1,h2,h3,h4,h5 {font-family: "RobotoDraft", "Roboto", sans-serif}
+.w3-bar-block .w3-bar-item {padding: 16px}
 </style>
 <body onload="view()">
 
 <!-- Side Navigation -->
-<nav class="w3-sidebar w3-bar-block w3-collapse w3-white w3-animate-left w3-card" style="z-index:3;width:30%;" id="mySidebar">
-  <a href="javascript:void(0)" class="w3-bar-item w3-button w3-border-bottom w3-large">Reminiscent Email</a>
+<nav class="w3-sidebar w3-bar-block w3-collapse w3-white w3-animate-left w3-card" style="z-index:3;width:32%;" id="mySidebar">
+  <a href="javascript:void(0)" class="w3-bar-item w3-button w3-border-bottom w3-large">REMINISCENT EMAIL</a>
   <a href="javascript:void(0)" onclick="w3_close()" title="Close Sidemenu"
   class="w3-bar-item w3-button w3-hide-large w3-large">Close <i class="fa fa-remove"></i></a>
 
@@ -34,58 +30,38 @@
      <a href="javascript:void(0)" class="w3-bar-item w3-button w3-border-bottom test w3-hover-light-grey" onclick="openMail('Jane');w3_close();">
       <div class="w3-container">
         <span class="w3-opacity w3-large">Jane Doe</span>
-        <h6>Subject: Forget Me Not</h6>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
       </div>
     </a>
     <a href="javascript:void(0)" class="w3-bar-item w3-button w3-border-bottom test w3-hover-light-grey" onclick="openMail('John');w3_close();">
       <div class="w3-container">
-        <span class="w3-opacity w3-large">John Doe</span>
+       <span class="w3-opacity w3-large">John Doe</span>
         <p>Welcome!</p>
       </div>
     </a>
   </div>
 </nav>
 
-<!-- Modal that pops up when you click on "New Message" -->
-<div id="id01" class="w3-modal" style="z-index:4">
-  <div class="w3-modal-content w3-animate-zoom">
-    <div class="w3-container w3-padding w3-red">
-       <span onclick="document.getElementById('id01').style.display='none'"
-       class="w3-button w3-red w3-right w3-xxlarge"><i class="fa fa-remove"></i></span>
-      <h2>Send Mail</h2>
-    </div>
-    <div class="w3-panel">
-      <label>To</label>
-      <input class="w3-input w3-border w3-margin-bottom" type="text">
-      <label>From</label>
-      <input class="w3-input w3-border w3-margin-bottom" type="text">
-      <label>Subject</label>
-      <input class="w3-input w3-border w3-margin-bottom" type="text">
-      <input class="w3-input w3-border w3-margin-bottom" style="height:150px" placeholder="What's on your mind?">
-      <div class="w3-section">
-        <a class="w3-button w3-red" onclick="document.getElementById('id01').style.display='none'">Cancel  <i class="fa fa-remove"></i></a>
-        <a class="w3-button w3-light-grey w3-right" onclick="document.getElementById('id01').style.display='none'">Send  <i class="fa fa-paper-plane"></i></a>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- Overlay effect when opening the side navigation on small screens -->
-<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="Close Sidemenu" id="myOverlay"></div>
+<!--<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="Close Sidemenu" id="myOverlay"></div>-->
 
 <!-- Page content -->
-<div class="w3-main" style="margin-left:30%;">
+<div class="w3-main" style="margin-left:32%;">
 <i class="fa fa-bars w3-button w3-white w3-hide-large w3-xlarge w3-margin-left w3-margin-top" onclick="w3_open()"></i>
+<a href="javascript:void(0)" class="w3-hide-large w3-red w3-button w3-right w3-margin-top w3-margin-right" onclick="document.getElementById('id01').style.display='block'"><i class="fa fa-pencil"></i></a>
 
 <div id="Borge" class="w3-container person">
   <br>
   <h5 class="w3-opacity">Subject: Remember Me</h5>
-  <h4><i class="fa fa-clock-o"></i> From: Borge Refsnes, Sep 27, 2015.</h4>
+  <h4><i class="fa fa-clock-o"></i> From Borge Refsnes, Sep 27, 2015.</h4>
+
+    <a class="w3-button w3-light-grey" href="#">Like<i class="w3-margin-left fa fa-mail-reply"></i></a>
+    <a class="w3-button w3-light-grey" href="#">Not Interested<i class="w3-margin-left fa fa-arrow-right"></i></a>
 
   <hr>
-  <p>Hello, i just wanted to let you know that i'll be home at </p>
-  <p>quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+  <p>Hello, i just wanted to let you know that i'll be home at Iorem ipsum dolor site amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
   <p>Best Regards, <br>Borge Refsnes</p>
 </div>
 
@@ -93,6 +69,8 @@
   <br>
   <h5 class="w3-opacity">Subject: None</h5>
   <h4><i class="fa fa-clock-o"></i> From Jane Doe, Sep 25, 2015.</h4>
+  <a class="w3-button w3-light-grey">Reply<i class="w3-margin-left fa fa-mail-reply"></i></a>
+  <a class="w3-button w3-light-grey">Not Interested<i class="w3-margin-left fa fa-arrow-right"></i></a>
   <hr>
   <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
   <p>Forever yours,<br>Jane</p>
@@ -103,14 +81,14 @@
   <h5 class="w3-opacity">Subject: None</h5>
   <h4><i class="fa fa-clock-o"></i> From John Doe, Sep 23, 2015.</h4>
   <a class="w3-button w3-light-grey">Reply<i class="w3-margin-left fa fa-mail-reply"></i></a>
-  <a class="w3-button w3-light-grey">Forward<i class="w3-margin-left fa fa-arrow-right"></i></a>
+  <a class="w3-button w3-light-grey">Not Interested<i class="w3-margin-left fa fa-arrow-right"></i></a>
   <hr>
   <p>Welcome.</p>
   <p>That's it!</p>
 </div>
 
 </div>
-<script src = "js/grant_access.js" ></script>
+<script src = "js/predict.js" ></script>
 <script>
 var openInbox = document.getElementById("myBtn");
 openInbox.click();
@@ -120,8 +98,8 @@ function w3_open() {
     document.getElementById("myOverlay").style.display = "block";
 }
 function w3_close() {
-    document.getElementById("mySidebar").style.display = "none";
-    document.getElementById("myOverlay").style.display = "none";
+//    document.getElementById("mySidebar").style.display = "none";
+//    document.getElementById("myOverlay").style.display = "none";
 }
 
 function myFunc(id) {
@@ -148,7 +126,7 @@ function openMail(personName) {
        x[i].className = x[i].className.replace(" w3-light-grey", "");
     }
     document.getElementById(personName).style.display = "block";
-    event.currentTarget.className += " w3-light-grey";
+//    event.currentTarget.className += " w3-light-grey";
 }
 </script>
 
