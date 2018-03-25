@@ -1,11 +1,11 @@
-const electron = require('electron')
+const electron = require('electron');
 
-const app = electron.app
+const app = electron.app;
 
-const BrowserWindow = electron.BrowserWindow
+const BrowserWindow = electron.BrowserWindow;
 
-var path = require('path')
-var url = require('url')
+var path = require('path');
+var url = require('url');
 
 var fs = require('fs');
 
@@ -56,21 +56,22 @@ function createWindow () {
         width : 1024,
         height : 600,
 //        frame: false,
-        icon: path.join(__dirname,'app/images/letter.PNG_256x256.png')
+        icon: path.join(__dirname, 'assets/icons/png/64x64.png')
+//        icon: path.join(__dirname,'app/images/letter.PNG_256x256.png')
     })
 
     fs.readFile(TOKEN_PATH, function(err, token) {
         if (err) {
-            mainWindow.loadURL(path.join(__dirname, 'app/index.html'))
+            mainWindow.loadURL(path.join(__dirname, 'index.html'))
         } else {
-            mainWindow.loadURL(path.join(__dirname, 'app/email.html'))
+            mainWindow.loadURL(path.join(__dirname, 'email.html'))
         }
     });
 
 //    mainWindow.loadURL(path.join(__dirname, 'app/index.html'))
 
     // Open the DevTools.
-    mainWindow.webContents.openDevTools()
+//    mainWindow.webContents.openDevTools()
 
     mainWindow.once('ready-to-show', () => {
         mainWindow.show();
