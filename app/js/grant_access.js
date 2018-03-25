@@ -2,7 +2,8 @@ var $ = require('jquery');
 
 var fs = require('fs');
 
-var googleAuth = require('google-auth-library');
+var google = require('googleapis');
+//var googleAuth = require('google-auth-library');
 
 var SCOPES = ['https://www.googleapis.com/auth/gmail.readonly'];
 
@@ -49,8 +50,8 @@ function authorize(credentials,callback) {
   var clientSecret = credentials.installed.client_secret;
   var clientId = credentials.installed.client_id;
   var redirectUrl = credentials.installed.redirect_uris[0];
-  var auth = new googleAuth();
-  var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
+//  var auth = new googleAuth();
+  var oauth2Client = new google.auth.OAuth2(clientId, clientSecret, redirectUrl);
 
   // Check if we have previously stored a token.
   fs.readFile(TOKEN_PATH, function(err, token) {

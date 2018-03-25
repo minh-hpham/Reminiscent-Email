@@ -3,7 +3,9 @@ var $ = require('jquery');
 var fs = require('fs');
 
 var google = require('googleapis');
-var googleAuth = require('google-auth-library');
+
+var base64url = require('base64url');
+//var googleAuth = require('google-auth-library');
 
 var SCOPES = ['https://www.googleapis.com/auth/gmail.readonly'];
 
@@ -11,25 +13,89 @@ var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
     process.env.USERPROFILE) + '/.credentials/';
 var TOKEN_PATH = TOKEN_DIR + 'gmail-nodejs-quickstart.json';
 
+var MESSAGE_DIR = TOKEN_DIR + '/messages/';
+var MESSAGE_PATH = MESSAGE_DIR + 'messages.json';
+
+
+
 function view() {
-    // Load client secrets from a local file.
-    fs.readFile('app/assets/credentials/client_secret.json', function processClientSecrets(err, content) {
-      if (err) {
-        console.log('Error loading client secret file: ' + err);
-        return;
-      }
-      // Authorize a client with the loaded credentials, then call the
-      // Gmail API.
-      authorize(JSON.parse(content), searchSubject);
+    fs.readFile(MESSAGE_PATH, function(err, data) {
+        if (err) {
+            load_client_sercret(searchSubject);
+        } else {
+            var messages = JSON.parse(data);
+            display_messages(messages);
+        }
+
     });
 }
 
+function display_messages(messages) {
+    $('#myBtn').text("Inbox (" + Object.keys(messages).length + ")");
+
+    for (var message_id in messages) {
+        var message = messages[message_id];
+//        var name = message.from.match(/\w+\,\s\w+/)[0] || message.from.match(/<(.*?)>/)[1] ;
+//        if (name != null) {
+//            name = name[0] + " " + message.date
+//        } else {
+//            name = "None";
+//        }
+//        var email = message.from.match(/<(.*?)>/);
+
+
+        var subject = message.subject;
+        var sender = message.from+ ' ' + message.date;
+        $("#onSideBar").append(
+            '<a href="javascript:void(0)" class="w3-bar-item w3-button w3-border-bottom test w3-hover-light-grey" onclick="openMail(\''+message_id+ '\');w3_close();" id="'+"nav-"+message_id+'">'
+            + '<div class="w3-container">'
+            +   '<span class="w3-opacity w3-large">'+message.from+'</span>'
+            +    '<h6>Subject: '+subject+'</h6>'
+            +    '<p>'+message.snippet+'</p>'
+            +  '</div>'
+            +'</a>')
+
+        $(".w3-main").append(
+            '<div id="'+message_id+'" class="w3-container person">'
+            + '<br>'
+            +'<h5 class="w3-opacity">Subject: '+subject+'</h5>'
+            +  '<h4><i class="fa fa-clock-o"></i> From '+sender+'</h4>'
+            +  '<a class="w3-button w3-light-grey" href="#"> Like <i class="w3-margin-left fa "></i></a>'
+            + '<a class="w3-button w3-light-grey" href="#"> Unlike <i class="w3-margin-left fa "></i></a>'
+            + '<hr>'
+            +  '<p>'+base64url.decode(message.body)+'</p>'
+            +'</div>')
+
+    }
+
+    var openInbox = document.getElementById("myBtn");
+    openInbox.click();
+    openMail(Object.keys(messages)[0]);
+    var openTab = document.getElementById("nav-"+Object.keys(messages)[0]);
+    openTab.click();
+}
+/**
+* Load client secrets from a local file.
+*/
+function load_client_sercret(callback) {
+    fs.readFile('app/assets/credentials/client_secret.json', function processClientSecrets(err, content) {
+        if (err) {
+            console.log('Error loading client secret file: ' + err);
+            return;
+        } else {
+            authorize(JSON.parse(content), callback);
+        }
+    });
+}
+/**
+* Authorize a client with the loaded credentials, then call the Gmail API.
+*/
 function authorize(credentials, callback) {
   var clientSecret = credentials.installed.client_secret;
   var clientId = credentials.installed.client_id;
   var redirectUrl = credentials.installed.redirect_uris[0];
-  var auth = new googleAuth();
-  var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
+//  var auth = new googleAuth();
+  var oauth2Client = new google.auth.OAuth2(clientId, clientSecret, redirectUrl);
 
   // Check if we have previously stored a token.
   fs.readFile(TOKEN_PATH, function(err, token) {
@@ -43,35 +109,6 @@ function authorize(credentials, callback) {
   });
 }
 
-//function view() {
-//     fs.readFile('app/assets/credentials/client_secret.json', function processClientSecrets(err, content) {
-//        if (err) {
-//            console.log('Error loading client secret file: ' + err);
-//            return;
-//        }
-//        // Authorize a client with the loaded credentials, then call the
-//        // Gmail API.
-//        var credentials = JSON.parse(content);
-//        var clientSecret = credentials.installed.client_secret;
-//        var clientId = credentials.installed.client_id;
-//        var redirectUrl = credentials.installed.redirect_uris[0];
-//        var auth = new googleAuth();
-//        var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
-//
-//        // Check if we have previously stored a token.
-//        fs.readFile(TOKEN_PATH, function(err, token) {
-//        if (err) {
-//            console.log("HELLO YOU DON'T HAVE TOKEN")
-////            getNewToken(oauth2Client);
-//        }
-//            else {
-//                oauth2Client.credentials = JSON.parse(token);
-//                searchSubject(oauth2Client);
-//            }
-//        });
-//    });
-//}
-
 function searchSubject(auth) {
     var gmail = google.gmail({
         version: 'v1',
@@ -80,29 +117,24 @@ function searchSubject(auth) {
     gmail.users.messages.list({
         userId: 'me',
         maxResults: 10,
-        q: "{subject:congrats}",
+        q: "{subject:party subject:dinner}",
     }, function(err,response) {
         if (err) {
             console.log('The API returned an error: ' + err);
           return;
-        }
-        var messages = response.messages;
-        if (messages.length == 0) {
-          console.log('No messages found.');
         } else {
-            storeMessages(gmail,messages);
-//          console.log('Messages:');
-//          for (var i = 0; i < messages.length; i++) {
-//            var message_id = messages[i].id;
-//            getMessage(gmail,message_id);
-//          }
+            var messages = response.data.messages;
+            if (messages.length == 0) {
+              console.log('No messages found.');
+            } else {
+                storeMessages(gmail,messages);
+            }
         }
+
     })
 }
 
 function storeMessages(gmail,messages) {
-    var MESSAGE_DIR = TOKEN_DIR + '/messages/';
-    var MESSAGE_PATH = MESSAGE_DIR + 'messages.json';
     try {
         fs.mkdirSync(MESSAGE_DIR);
     } catch (err) {
@@ -110,44 +142,103 @@ function storeMessages(gmail,messages) {
           throw err;
         }
     }
-    var logger = fs.createWriteStream(MESSAGE_PATH, {
-      flags: 'a' // 'a' means appending (old data will be preserved)
-    })
+    save_message_wrapper(gmail,messages,get_and_save_message,
+        function(){
+            fs.readFile(MESSAGE_PATH, function(error,data) {
+                if (error) {
+                   console.log("Error open message file after saved: " + error)
+                } else {
+                   var messages = JSON.parse(data);
+                   display_messages(messages);
+                }
+            });
+        }
+    );
+
+}
+
+function save_message_wrapper(gmail,messages,get_and_save_message,callback) {
+    var count = 0;
+    function report() {
+        count++;
+        if(count === messages.length) {
+            callback();
+        }
+    }
 
     for (var i = 0; i < messages.length; i++) {
         var message_id = messages[i].id;
-        gmail.users.messages.get({
-                id: message_id,
-                userId: 'me',
-            }, function(err,response) {
-                if (err) {
-                    console.log('The API returned an error: ' + err);
-                  return;
-                }
-                console.log(' - Snippet: %s', response.snippet);
-                var data = response;
-                logger.write(JSON.stringify(data));
-        })
-//        var data = getMessage(gmail,message_id);
-//        logger.write(JSON.stringify(data));
+        get_and_save_message(gmail,message_id,report);
     }
-    logger.on('finish',() => {
-        console.log('Messages stored to ' + TOKEN_PATH);
-    });
-//    logger.end();
 }
-function getMessage(gmail,message_id) {
+
+function get_and_save_message(gmail,message_id,callback) {
     gmail.users.messages.get({
         id: message_id,
         userId: 'me',
+        format: 'full',
     }, function(err,response) {
         if (err) {
             console.log('The API returned an error: ' + err);
-          return;
+            return;
+        } else {
+            response = response.data;
+            var headers = response.payload.headers;
+            var from; var to; var subject; var date;
+            for (var j = 0; j < headers.length; j++) {
+                if(headers[j].name == 'From') {
+                    from = headers[j].value;
+                } else if(headers[j].name == 'Delivered-To') {
+                    to = headers[j].value;
+                } else if(headers[j].name == 'Subject') {
+                    subject = headers[j].value;
+                } else if(headers[j].name == 'Date') {
+                    date = headers[j].value;
+                }
+            }
+            var search_body = response.payload;
+            while(search_body.mimeType != 'text/plain') {
+                search_body = search_body.parts[0];
+            }
+
+
+//            var parts = response.payload.parts[0].parts;
+//            if (parts != null) {
+//                for (var j = 0; j < parts.length; j++) {
+//                    if (parts[j].mimeType == 'text/plain') {
+//                        body = parts[j].body.data;
+//                        break;
+//                    }
+//                }
+//            } else {
+//                body = response.snippet;
+//            }
+
+            var result = {
+                labelIds : response.labelIds,
+                snippet : response.snippet,
+                subject : subject,
+                from : from,
+                to : to,
+                date : date,
+                body : search_body.body.data
+            };
+
+            fs.readFile(MESSAGE_PATH, 'utf8', function readFileCallback(err, data){
+                var obj;
+                if (err){
+                    obj = {};
+                } else {
+                    obj = JSON.parse(data); //now it an object
+                }
+                obj[response.id] = result;
+                fs.writeFile(MESSAGE_PATH, JSON.stringify(obj), function (err) {
+                  if (err) throw err;
+                });
+            });
         }
-        console.log(' - Snippet: %s', response.snippet);
-        return response;
-    })
+        callback();
+    });
 }
 
 function listLabels(auth) {
@@ -159,16 +250,55 @@ function listLabels(auth) {
         if (err) {
           console.log('The API returned an error: ' + err);
           return;
-        }
-        var labels = response.labels;
-        if (labels.length == 0) {
-          console.log('No labels found.');
         } else {
-          console.log('Labels:');
-          for (var i = 0; i < labels.length; i++) {
-            var label = labels[i];
-            console.log('- %s', label.name);
-          }
+            var labels = response.labels;
+            if (labels.length == 0) {
+              console.log('No labels found.');
+            } else {
+              console.log('Labels:');
+              for (var i = 0; i < labels.length; i++) {
+                var label = labels[i];
+                console.log('- %s', label.name);
+              }
+            }
+
         }
+
     });
+}
+
+function w3_open() {
+    document.getElementById("mySidebar").style.display = "block";
+    document.getElementById("myOverlay").style.display = "block";
+}
+function w3_close() {
+    document.getElementById("mySidebar").style.display = "none";
+    document.getElementById("myOverlay").style.display = "none";
+}
+
+function myFunc(id) {
+    var x = document.getElementById(id);
+    if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+        x.previousElementSibling.className += " w3-red";
+    } else {
+        x.className = x.className.replace(" w3-show", "");
+        x.previousElementSibling.className =
+        x.previousElementSibling.className.replace(" w3-red", "");
+    }
+}
+
+
+function openMail(id) {
+    var i;
+    var x = document.getElementsByClassName("person");
+    for (i = 0; i < x.length; i++) {
+       x[i].style.display = "none";
+    }
+    x = document.getElementsByClassName("test");
+    for (i = 0; i < x.length; i++) {
+       x[i].className = x[i].className.replace(" w3-light-grey", "");
+    }
+    document.getElementById(id).style.display = "block";
+    $('#'+id).className += " w3-light-grey";
 }
