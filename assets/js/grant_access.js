@@ -1,6 +1,7 @@
-var $ = require('jquery');
+var $ = require('jQuery');
 
 var fs = require('fs');
+var path = require('path');
 
 var google = require('googleapis');
 //var googleAuth = require('google-auth-library');
@@ -25,7 +26,8 @@ $("#authUrl").on('click',function(event) {
 
 // start when User clicks on Sign In with Google Account
 function signin() {
-    fs.readFile('assets/credentials/client_secret.json', function processClientSecrets(err, content) {
+    var jsonPath = path.join(__dirname, 'assets', 'credentials','client_secret.json');
+    fs.readFile(jsonPath, function processClientSecrets(err, content) {
         if (err) {
             console.log('Error loading client secret file: ' + err);
             return;
@@ -40,7 +42,8 @@ function signin() {
 * Go to the main page
 */
 function changeView() {
-    location.assign('email.html');
+    var htmlPath = path.join(__dirname, 'email.html');
+    location.assign(htmlPath);
 }
 
 /**

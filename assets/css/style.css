@@ -1,7 +1,3 @@
-@font-face {
-  font-family: 'Roboto';
-  src: url(' https://fonts.gstatic.com/stats/Roboto/normal/300');
-}
 
 ::-webkit-scrollbar { display: none; }
 html, body {

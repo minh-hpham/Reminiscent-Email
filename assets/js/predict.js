@@ -1,6 +1,7 @@
 var $ = require('jQuery');
 
 var fs = require('fs');
+var path = require('path');
 
 var google = require('googleapis');
 
@@ -13,7 +14,7 @@ var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
     process.env.USERPROFILE) + '/.credentials/';
 var TOKEN_PATH = TOKEN_DIR + 'gmail-nodejs-quickstart.json';
 
-var MESSAGE_DIR = TOKEN_DIR + '/messages/';
+var MESSAGE_DIR = TOKEN_DIR + 'messages/';
 var MESSAGE_PATH = MESSAGE_DIR + 'messages.json';
 
 
@@ -63,7 +64,8 @@ function display_messages(messages) {
             +  '<a class="w3-button w3-light-grey" href="#"> Like <i class="w3-margin-left fa "></i></a>'
             + '<a class="w3-button w3-light-grey" href="#"> Unlike <i class="w3-margin-left fa "></i></a>'
             + '<hr>'
-            +  '<p>'+base64url.decode(message.body)+'</p>'
+            +  '<p>'+message.body+'</p>'
+//            +  '<p>'+base64url.decode(message.body)+'</p>'
             +'</div>')
 
     }
@@ -78,7 +80,8 @@ function display_messages(messages) {
 * Load client secrets from a local file.
 */
 function load_client_sercret(callback) {
-    fs.readFile('assets/credentials/client_secret.json', function processClientSecrets(err, content) {
+    var jsonPath = path.join(__dirname, 'assets', 'credentials','client_secret.json');
+    fs.readFile(jsonPath, function processClientSecrets(err, content) {
         if (err) {
             console.log('Error loading client secret file: ' + err);
             return;
@@ -142,7 +145,7 @@ function storeMessages(gmail,messages) {
           throw err;
         }
     }
-    save_message_wrapper(gmail,messages,get_and_save_message,
+    save_message_wrapper(gmail,messages,
         function(){
             fs.readFile(MESSAGE_PATH, function(error,data) {
                 if (error) {
@@ -157,7 +160,7 @@ function storeMessages(gmail,messages) {
 
 }
 
-function save_message_wrapper(gmail,messages,get_and_save_message,callback) {
+function save_message_wrapper(gmail,messages,callback) {
     var count = 0;
     function report() {
         count++;
@@ -165,68 +168,74 @@ function save_message_wrapper(gmail,messages,get_and_save_message,callback) {
             callback();
         }
     }
-
-    for (var i = 0; i < messages.length; i++) {
-        var message_id = messages[i].id;
-        get_and_save_message(gmail,message_id,report);
-    }
-}
-
-function get_and_save_message(gmail,message_id,callback) {
-    gmail.users.messages.get({
-        id: message_id,
-        userId: 'me',
-        format: 'full',
-    }, function(err,response) {
-        if (err) {
-            console.log('The API returned an error: ' + err);
-            return;
+    var get_and_save_message = function(index) {
+        if (index == messages.length) {
+            callback();
         } else {
-            response = response.data;
-            var headers = response.payload.headers;
-            var from; var to; var subject; var date;
-            for (var j = 0; j < headers.length; j++) {
-                if(headers[j].name == 'From') {
-                    from = headers[j].value;
-                } else if(headers[j].name == 'Delivered-To') {
-                    to = headers[j].value;
-                } else if(headers[j].name == 'Subject') {
-                    subject = headers[j].value;
-                } else if(headers[j].name == 'Date') {
-                    date = headers[j].value;
-                }
-            }
-            var search_body = response.payload;
-            while(search_body.mimeType != 'text/plain') {
-                search_body = search_body.parts[0];
-            }
-
-            var result = {
-                labelIds : response.labelIds,
-                snippet : response.snippet,
-                subject : subject,
-                from : from,
-                to : to,
-                date : date,
-                body : search_body.body.data
-            };
-
-            fs.readFile(MESSAGE_PATH, 'utf8', function readFileCallback(err, data){
-                var obj;
-                if (err){
-                    obj = {};
+            var message_id = messages[index].id;
+            gmail.users.messages.get({
+                id: message_id,
+                userId: 'me',
+                format: 'full',
+            }, function(err,response) {
+                if (err) {
+                    console.log('The API returned an error: ' + err);
+                    return;
                 } else {
-                    obj = JSON.parse(data); //now it an object
+                    response = response.data;
+                    var result = only_needed_data(response);
+
+                    fs.readFile(MESSAGE_PATH, function readFileCallback(err, data){
+                        var obj;
+                        if (err){
+                            obj = {};
+                        } else {
+                            obj = JSON.parse(data); //now it an object
+                        }
+                        obj[response.id] = result;
+                        fs.writeFile(MESSAGE_PATH, JSON.stringify(obj),function (err) {
+                          if (err) throw err;
+                        });
+                    });
+                    get_and_save_message(index+1);
                 }
-                obj[response.id] = result;
-                fs.writeFile(MESSAGE_PATH, JSON.stringify(obj), function (err) {
-                  if (err) throw err;
-                });
             });
         }
-        callback();
-    });
+    };
+    get_and_save_message(0);
 }
+
+function only_needed_data(response) {
+    var headers = response.payload.headers;
+    var from; var to; var subject; var date;
+    for (var j = 0; j < headers.length; j++) {
+        if(headers[j].name == 'From') {
+            from = headers[j].value;
+        } else if(headers[j].name == 'Delivered-To') {
+            to = headers[j].value;
+        } else if(headers[j].name == 'Subject') {
+            subject = headers[j].value;
+        } else if(headers[j].name == 'Date') {
+            date = headers[j].value;
+        }
+    }
+    var search_body = response.payload;
+    while(search_body.mimeType != 'text/plain') {
+        search_body = search_body.parts[0];
+    }
+    var body = base64url.decode(search_body.body.data);
+    var result = {
+        labelIds : response.labelIds,
+        snippet : response.snippet,
+        subject : subject,
+        from : from,
+        to : to,
+        date : date,
+        body : body
+    };
+    return result;
+}
+
 
 function listLabels(auth) {
     var gmail = google.gmail('v1');
