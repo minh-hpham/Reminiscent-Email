@@ -1,0 +1,3 @@
+electron -g
+--save jQuery
+is-online --save
