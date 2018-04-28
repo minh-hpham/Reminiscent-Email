@@ -5,7 +5,13 @@
         <meta charset="UTF-8">
         <title>Reminiscent</title>
         <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900'>
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <link rel="stylesheet" href="assets/css/style.css">
+        <style>
+            .form {
+                max-width: 450px;
+            }
+        </style>
     </head>
 
     <body>
@@ -18,20 +24,29 @@
         <div class="form">
             <div class="letter"><img src="images/letter.PNG"/></div>
             <br>
-            <p class="message" style="display: none;">Please authorize the app with <a id="authUrl" href="#">this url</a></p>
-            <input style="display: none;" id="user-code" type="text" name="user-code" placeholder="Enter the access code">
-            <br>
-            <form class="login-form">
-                <button class="loginBtn loginBtn--google" id="signin-btn" type="button" onclick="signin()">
-                    Sign in with Google Account
-                </button>
-
-            </form>
+            
+            <div class="w3-show-inline-block">
+            <div class="w3-bar">
+                <a id="downloadFile" href="https://takeout.google.com/settings/takeout" class="w3-btn w3-red">Download your gmail</a>
+                <a id="selectFile" class="w3-btn w3-green">Open gmail directory</a>
+            </div>
+            </div>
+            
+            
         </div>
-        <script>require('./renderer.js')</script>
-        <script src = "assets/js/grant_access.js" ></script>
-        <script src="assets/js/prefixfree.min.js"></script>
-
+        <script>
+            const electron = require('electron');
+            const remote = electron.remote;
+            var shell = electron.shell;
+            const mainProcess = remote.require('./main');
+            document.getElementById('selectFile').addEventListener('click', _ => {
+              mainProcess.selectEmailFile();
+            })
+            document.getElementById('downloadFile').addEventListener('click',function(event) {
+                event.preventDefault();
+                shell.openExternal(this.href);
+            });
+        </script>
     </body>
 
 </html>

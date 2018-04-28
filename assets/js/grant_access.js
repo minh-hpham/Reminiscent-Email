@@ -16,13 +16,15 @@ var TOKEN_PATH = TOKEN_DIR + 'gmail-nodejs-quickstart.json';
 /**
 * Open external link
 */
-var shell = require('electron').shell;
+
 $("#authUrl").on('click',function(event) {
     event.preventDefault();
     shell.openExternal(this.href);
     $('.message').hide();
     $('#user-code').show();
 });
+
+
 
 // start when User clicks on Sign In with Google Account
 function signin() {
